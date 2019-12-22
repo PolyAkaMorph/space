@@ -1,17 +1,18 @@
 package com.space.controller;
 
-import com.space.model.ShipType;
-import com.space.model.SpaceShip;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.space.model.Ship;
+import com.space.service.ShipDataService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class SpaceController {
-    @RequestMapping(value ="/rest/ships", method = RequestMethod.GET)
-    public SpaceShip getShip(@RequestParam(value="id") Integer id) {
-        return new SpaceShip(2L, "First one", "Earth", ShipType.MERCHANT, System.currentTimeMillis(),false,50d, 3, 100d);
-    }
+    @Autowired
+    private ShipDataService shipDataService;
 
+
+    @RequestMapping(value ="/rest/ships/{id}", method = RequestMethod.GET)
+    public Ship getShip(@PathVariable(value="id") Long id) {
+        return shipDataService.getAloneShip(id);
+    }
 }

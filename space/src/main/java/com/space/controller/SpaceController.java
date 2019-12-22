@@ -15,4 +15,14 @@ public class SpaceController {
     public Ship getShip(@PathVariable(value="id") Long id) {
         return shipDataService.getAloneShip(id);
     }
+
+    @RequestMapping(value = "rest/ships", method = RequestMethod.GET)
+    public Iterable<Ship> getAllShips() {
+        return shipDataService.getShipsList();
+    }
+
+    @RequestMapping(value = "rest/ships/count", method = RequestMethod.GET)
+    public Long getShipsCount()  {
+        return shipDataService.getShipsCount();
+    }
 }

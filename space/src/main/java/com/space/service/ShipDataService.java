@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @Service
 public class ShipDataService {
@@ -16,8 +16,17 @@ public class ShipDataService {
 
     @Transactional
     public Ship getAloneShip(Long id) {
-        Optional<Ship> optional = shipCrudRepository.findById(id);
-        return optional.orElse(null);
+        return shipCrudRepository.findById(id).orElse(null);
+    }
+
+    @Transactional
+    public Iterable<Ship> getShipsList() {
+        return shipCrudRepository.findAll();
+    }
+
+    @Transactional
+    public long getShipsCount() {
+        return StreamSupport.stream(shipCrudRepository.findAll().spliterator(), false).count();
     }
 }
 

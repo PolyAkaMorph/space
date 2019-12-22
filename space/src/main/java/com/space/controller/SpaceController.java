@@ -11,18 +11,19 @@ public class SpaceController {
     private ShipDataService shipDataService;
 
 
-    @RequestMapping(value ="/rest/ships/{id}", method = RequestMethod.GET)
-    public Ship getShip(@PathVariable(value="id") Long id) {
+    @RequestMapping(value = "/rest/ships/{id}", method = RequestMethod.GET)
+    public Ship getShip(@PathVariable(value = "id") Long id) {
         return shipDataService.getAloneShip(id);
     }
 
     @RequestMapping(value = "rest/ships", method = RequestMethod.GET)
-    public Iterable<Ship> getAllShips() {
-        return shipDataService.getShipsList();
+    public Iterable<Ship> getAllShips(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "planet", required = false) String planet) {
+        return shipDataService.getShipsList(name);
     }
 
+
     @RequestMapping(value = "rest/ships/count", method = RequestMethod.GET)
-    public Long getShipsCount()  {
+    public Long getShipsCount() {
         return shipDataService.getShipsCount();
     }
 }

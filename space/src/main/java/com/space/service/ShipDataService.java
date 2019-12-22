@@ -20,8 +20,8 @@ public class ShipDataService {
     }
 
     @Transactional
-    public Iterable<Ship> getShipsList() {
-        return shipCrudRepository.findAll();
+    public Iterable<Ship> getShipsList(String name) {
+        return shipCrudRepository.findShips(name);
     }
 
     @Transactional

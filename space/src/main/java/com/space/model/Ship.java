@@ -6,64 +6,65 @@ import java.util.Date;
 @Entity
 @Table(name = "SHIP")
 public class Ship {
-    private Long id;
-    private String name;
-    private String planet;
-    private ShipType shipType;
-    private Date prodDate;
-    private Boolean isUsed;
-    private Double speed;
-    private Integer crewSize;
-    private Double rating;
-
-    public Ship() {
-    }
-
     @Id
     @Column(name = "ID")
-    // @SequenceGenerator(name="EMPLOYEES_SEQ", sequenceName="EMPLOYEES_SEQ",allocationSize=1)
-    public Long getId() {
-        return id;
-    }
+    private Long id;
     @Basic
-    @Column(name = "NAME")
-    public String getName() {
-        return name;
-    }
+    @Column(name = "NAME", length = 50)
+    private String name;
     @Basic
-    @Column(name = "PLANET")
-    public String getPlanet() {
-        return planet;
-    }
+    @Column(name = "PLANET", length = 50)
+    private String planet;
     @Basic
     @Column(name = "SHIPTYPE")
     @Enumerated(EnumType.STRING)
-    public ShipType getShipType() {
-        return shipType;
-    }
+    private ShipType shipType;
     @Basic
     @Column(name = "PRODDATE")
     @Temporal(TemporalType.TIMESTAMP)
+    private Date prodDate;
+    @Basic
+    @Column(name = "ISUSED")
+    private Boolean isUsed;
+
+
+    private Double speed;
+    @Basic
+    @Column(name = "CREWSIZE")
+    private Integer crewSize;
+    @Basic
+    @Column(name = "RATING")
+    private Double rating;
+
+
+
+
+    public Ship() {
+    }
+    public Long getId() {
+        return id;
+    }
+    public String getName() {
+        return name;
+    }
+    public String getPlanet() {
+        return planet;
+    }
+    public ShipType getShipType() {
+        return shipType;
+    }
     public Date getProdDate() {
         return prodDate;
     }
-    @Basic
-    @Column(name = "ISUSED")
     public Boolean getIsUsed() {
         return isUsed;
     }
-    @Basic
-    @Column(name = "SPEED")
     public Double getSpeed() {
         return speed;
     }
-    @Basic
-    @Column(name = "CREWSIZE")
     public Integer getCrewSize() {
         return crewSize;
     }
-    @Basic
-    @Column(name = "RATING")
     public Double getRating() {
         return rating;
     }

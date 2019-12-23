@@ -9,8 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface ShipCrudRepository extends CrudRepository<Ship,Long> {
     Iterable<Ship> findByNameIgnoreCaseContainingAndPlanetIgnoreCaseContaining(String name, String planet);
 
-    @Query("from Ship s where(:name is null or s.name = :name)")
-    // and (:planet is null or s.planet = :planet)
+    @Query("from Ship s where lower(s.name) like lower(concat('%', :name,'%')) or :name is null")
     Iterable<Ship> findShips(String name);
 
 }

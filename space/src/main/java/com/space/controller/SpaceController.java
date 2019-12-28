@@ -30,7 +30,8 @@ public class SpaceController {
                                        @RequestParam(value = "after", required = false) Long after,
                                        @RequestParam(value = "before", required = false) Long before) {
         logger.info("got many ships");
-        return shipDataService.getShipsList(name,planet, shipType,after,before);
+        return shipDataService.getShipsListStable(name, planet);
+        //return shipDataService.getShipsList(name,planet, shipType,after,before);
     }
 
 

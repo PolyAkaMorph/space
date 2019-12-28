@@ -25,8 +25,12 @@ public class ShipDataService {
 
     @Transactional
     public Iterable<Ship> getShipsList(String name, String planet, ShipType shipType, Long after, Long before) {
-
         return shipCrudRepository.getShipsList(name, planet, shipType.toString(),setDefaultAfter(after), setDefaultBefore(before));
+    }
+
+    @Transactional
+    public Iterable<Ship> getShipsListStable(String name, String planet) {
+        return shipCrudRepository.getShipsStable(name,planet);
     }
 
     @Transactional

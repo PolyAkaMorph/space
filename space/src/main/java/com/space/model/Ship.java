@@ -26,8 +26,8 @@ public class Ship {
     @Basic
     @Column(name = "ISUSED")
     private Boolean isUsed;
-
-
+    @Basic
+    @Column(name = "SPEED")
     private Double speed;
     @Basic
     @Column(name = "CREWSIZE")

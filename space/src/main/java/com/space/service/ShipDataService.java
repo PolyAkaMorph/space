@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.*;
-import java.util.stream.StreamSupport;
+
+import java.util.Calendar;
+import java.util.Date;
 
 @Service
 public class ShipDataService {
@@ -80,7 +80,6 @@ public class ShipDataService {
                 setDefaultMinRating(minRating), setDefaultMaxRating(maxRating), PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE,
                         Sort.Direction.DESC, ShipOrder.ID.getFieldName()));
         return ships.getTotalElements();
-        //return StreamSupport.stream(shipCrudRepository.findAll().spliterator(), false).count();
     }
 
 
@@ -105,9 +104,20 @@ public class ShipDataService {
         if (null == before || DEFAULT_MAX_DATE < before) {
             return new Date(DEFAULT_MAX_DATE);
         } else {
-            return new Date(before);
+            return truncateDateToYear(new Date(before));
         }
     }
+
+    private static Date truncateDateToYear(Date date) {
+        Calendar cal = Calendar.getInstance(); // locale-specific
+        cal.setTime(date);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return new Date(cal.getTimeInMillis() - 1);
+    }
+
 
     private static Boolean setDefaultIsUsed(Boolean isUsed) {
         return null == isUsed ? false : isUsed;

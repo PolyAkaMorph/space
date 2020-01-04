@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Date;
 
 @Repository
-public interface ShipCrudRepository extends CrudRepository<Ship,Long> {
+public interface ShipCrudRepository extends CrudRepository<Ship, Long> {
     @Query(value = "from Ship where (:name is null or lower(name) like lower(concat('%', :name,'%'))) and " +
             "(:planet is null or lower(planet) like lower(concat('%', :planet,'%')))")
     Iterable<Ship> getShipsStable(@Param("name") String name,
@@ -20,9 +20,9 @@ public interface ShipCrudRepository extends CrudRepository<Ship,Long> {
 
     @Query(value = "select s from Ship s " +
             "where (:name is null or lower(s.name) like lower(concat('%', :name,'%'))) and " +
-    "(:planet is null or lower(s.planet) like lower(concat('%', :planet,'%'))) and " +
-    "(:shipType is null or s.shipType = :shipType) and (s.prodDate between :after and :before) and" +
-    "(:isUsed is null or s.isUsed = :isUsed) and (s.speed between :minSpeed and :maxSpeed) and " +
+            "(:planet is null or lower(s.planet) like lower(concat('%', :planet,'%'))) and " +
+            "(:shipType is null or s.shipType = :shipType) and (s.prodDate between :after and :before) and" +
+            "(:isUsed is null or s.isUsed = :isUsed) and (s.speed between :minSpeed and :maxSpeed) and " +
             "(s.crewSize between :minCrewSize and :maxCrewSize) and " +
             "(s.rating between :minRating and :maxRating)")
     Page<Ship> getShipsList(@Param("name") String name,
@@ -37,6 +37,6 @@ public interface ShipCrudRepository extends CrudRepository<Ship,Long> {
                             @Param("maxCrewSize") Integer maxCrewSize,
                             @Param("minRating") Double minRating,
                             @Param("maxRating") Double maxRating,
-                             Pageable pageable);
+                            Pageable pageable);
 }
 

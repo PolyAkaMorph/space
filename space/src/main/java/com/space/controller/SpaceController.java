@@ -18,32 +18,21 @@ public class SpaceController {
     @Autowired
     private ShipDataService shipDataService;
 
-
-
-/*
-@RequestParam(value = "name", required = false) String name,
-                           @RequestParam(value = "planet", required = false) String planet,
-                           @RequestParam(value = "shipType", required = false) ShipType shipType,
-                           @RequestParam(value = "prodDate", required = false) Long prodDate,
-                           @RequestParam(value = "isUsed", required = false) Boolean isUsed,
-                           @RequestParam(value = "speed", required = false) Double speed,
-                           @RequestParam(value = "crewSize", required = false) Integer crewSize
- */
-
     @RequestMapping(value = "/rest/ships", method = RequestMethod.POST, consumes ="application/json",produces = "application/json")
     @ResponseBody
     public Ship createShip(@RequestBody Ship ship) {
         return shipDataService.createShip(ship);
     }
 
+    @RequestMapping(value = "rest/ships/{id}", method = RequestMethod.DELETE)
+    public void deleteShip(@PathVariable(value = "id") Long id) {
+        shipDataService.deleteShip(id);
+    }
+
 
     @RequestMapping(value = "/rest/ships/{id}", method = RequestMethod.GET)
     public Ship getShip(@PathVariable(value = "id") Long id) {
-        //todo check data in data service
         logger.info("got one ship");
-        if (null == id || id <= 0 || id != (int) id.longValue()) throw new BadRequestException();
-        Ship ship = shipDataService.getAloneShip(id);
-        if (null == ship) throw new ResourceNotFoundException();
         return shipDataService.getAloneShip(id);
     }
 

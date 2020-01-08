@@ -2,6 +2,7 @@ package com.space.service;
 
 import com.space.controller.ShipOrder;
 import com.space.controller.response_statuses.BadRequestException;
+import com.space.controller.response_statuses.ResourceNotFoundException;
 import com.space.model.Ship;
 import com.space.model.ShipType;
 import com.space.repository.ShipCrudRepository;
@@ -44,6 +45,16 @@ public class ShipDataService {
     EntityManager em;
 
     @Transactional
+    public void deleteShip(Long id) {
+        if (!isItInteger(id)) {
+            throw new BadRequestException();
+        }
+        Ship ship = shipCrudRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        em.remove(ship);
+        em.flush();
+    }
+
+    @Transactional
     public Ship createShip(Ship ship) {
         if (null == ship || null == ship.getProdDate()) {
             throw new BadRequestException();
@@ -56,6 +67,9 @@ public class ShipDataService {
         Double speed = ship.getSpeed();
         Integer crewSize = ship.getCrewSize();
         if (null == name || null == planet || null == shipType || null == speed || null == crewSize) {
+            throw new BadRequestException();
+        }
+        if (name.length() > 50 || name.length() == 0 || planet.length() > 50 || planet.length() == 0) {
             throw new BadRequestException();
         }
         if (prodDate > DEFAULT_MAX_DATE || prodDate < DEFAULT_MIN_DATE ||
@@ -75,7 +89,10 @@ public class ShipDataService {
 
     @Transactional
     public Ship getAloneShip(Long id) {
-        return shipCrudRepository.findById(id).orElse(null);
+        if (!isItInteger(id)) {
+            throw new BadRequestException();
+        }
+        return shipCrudRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
     @Transactional
@@ -116,6 +133,10 @@ public class ShipDataService {
                 setDefaultMinRating(minRating), setDefaultMaxRating(maxRating), PageRequest.of(DEFAULT_PAGE_NUMBER, DEFAULT_PAGE_SIZE,
                         Sort.Direction.DESC, ShipOrder.ID.getFieldName()));
         return ships.getTotalElements();
+    }
+
+    private static Boolean isItInteger(Long aLong) {
+        return null != aLong && aLong > 0 && aLong == (int) aLong.longValue();
     }
 
     private static Double calcRating(Double speed, Boolean isUsed, Long prodDate) {

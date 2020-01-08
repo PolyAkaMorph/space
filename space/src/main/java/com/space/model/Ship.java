@@ -1,7 +1,6 @@
 package com.space.model;
 
 import javax.persistence.*;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
@@ -10,6 +9,7 @@ import java.util.Objects;
 public class Ship {
     @Id
     @Column(name = "ID")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     @Basic
     @Column(name = "NAME", length = 50)

@@ -45,11 +45,51 @@ public class ShipDataService {
     EntityManager em;
 
     @Transactional
-    public void deleteShip(Long id) {
-        if (!isItInteger(id)) {
+    public Ship updateShip(Long id, String name, String planet, ShipType shipType, Long prodDate, Boolean isUsed, Double speed, Integer crewSize) {
+        Ship ship = getAloneShip(id);
+        if (null == name) {
+            // checking how tests are working
             throw new BadRequestException();
         }
-        Ship ship = shipCrudRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        if (null == name && null == planet && null == shipType && null == speed && null == crewSize) {
+            return ship;
+        }
+        //todo refactor here
+        if (null != name && (name.length() > 50 || name.isEmpty())) throw new BadRequestException();
+        if (null != planet && (planet.length() > 50 || planet.isEmpty())) throw new BadRequestException();
+        if (null != prodDate && (prodDate > DEFAULT_MAX_DATE || prodDate < DEFAULT_MIN_DATE)) throw new BadRequestException();
+        if (null != speed && (speed > DEFAULT_MAX_SPEED || speed < DEFAULT_MIN_SPEED)) throw new BadRequestException();
+        if (null != crewSize && (crewSize > DEFAULT_MAX_CREW_SIZE || crewSize < DEFAULT_MIN_CREW_SIZE)) throw new BadRequestException();
+
+        if (null != name) ship.setName(name);
+        if (null != planet) ship.setName(planet);
+        if (null != speed) ship.setSpeed(speed);
+        if (null != shipType) ship.setShipType(shipType);
+        if (null != prodDate) ship.setProdDate(new Date(prodDate));
+        if (null != isUsed) ship.setIsUsed(isUsed);
+        if (null != crewSize) ship.setCrewSize(crewSize);
+        Double rating = calcRating(ship.getSpeed(),ship.getIsUsed(),ship.getProdDate().getTime());
+        ship.setRating(rating);
+        em.merge(ship);
+        em.flush();
+
+        return ship;
+    }
+
+    private void checkParams(String name, String planet, Long prodDate, Double speed, Integer crewSize) {
+        if (name.length() > 50 || name.isEmpty() || planet.length() > 50 || planet.isEmpty()) {
+            throw new BadRequestException();
+        }
+        if (prodDate > DEFAULT_MAX_DATE || prodDate < DEFAULT_MIN_DATE ||
+                speed > DEFAULT_MAX_SPEED || speed < DEFAULT_MIN_SPEED ||
+                crewSize > DEFAULT_MAX_CREW_SIZE || crewSize < DEFAULT_MIN_CREW_SIZE) {
+            throw new BadRequestException();
+        }
+    }
+
+    @Transactional
+    public void deleteShip(Long id) {
+        Ship ship = getAloneShip(id);
         em.remove(ship);
         em.flush();
     }
@@ -69,14 +109,7 @@ public class ShipDataService {
         if (null == name || null == planet || null == shipType || null == speed || null == crewSize) {
             throw new BadRequestException();
         }
-        if (name.length() > 50 || name.length() == 0 || planet.length() > 50 || planet.length() == 0) {
-            throw new BadRequestException();
-        }
-        if (prodDate > DEFAULT_MAX_DATE || prodDate < DEFAULT_MIN_DATE ||
-            speed > DEFAULT_MAX_SPEED || speed < DEFAULT_MIN_SPEED ||
-            crewSize > DEFAULT_MAX_CREW_SIZE || crewSize < DEFAULT_MIN_CREW_SIZE) {
-            throw new BadRequestException();
-        }
+        checkParams(name, planet, prodDate, speed, crewSize);
         isUsed = null == isUsed ? false : isUsed;
         Double rating = calcRating(speed, isUsed, prodDate);
         ship.setRating(rating);
@@ -194,11 +227,6 @@ public class ShipDataService {
         Calendar cal = Calendar.getInstance(); // locale-specific
         cal.setTime(new Date(date));
         return (double) cal.get(Calendar.YEAR);
-    }
-
-
-    private static Boolean setDefaultIsUsed(Boolean isUsed) {
-        return null == isUsed ? false : isUsed;
     }
 
     private static Double setDefaultMinSpeed(Double speed) {

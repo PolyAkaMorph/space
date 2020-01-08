@@ -1,7 +1,5 @@
 package com.space.controller;
 
-import com.space.controller.response_statuses.BadRequestException;
-import com.space.controller.response_statuses.ResourceNotFoundException;
 import com.space.model.Ship;
 import com.space.model.ShipType;
 import com.space.service.ShipDataService;
@@ -29,11 +27,22 @@ public class SpaceController {
         shipDataService.deleteShip(id);
     }
 
-
     @RequestMapping(value = "/rest/ships/{id}", method = RequestMethod.GET)
     public Ship getShip(@PathVariable(value = "id") Long id) {
         logger.info("got one ship");
         return shipDataService.getAloneShip(id);
+    }
+
+    @RequestMapping(value = "/rest/ships/{id}", method = RequestMethod.POST)
+    public Ship updateShip(@PathVariable(value = "id") Long id,
+                           @RequestParam(value = "name", required = false) String name,
+                           @RequestParam(value = "planet", required = false) String planet,
+                           @RequestParam(value = "shipType", required = false) ShipType shipType,
+                           @RequestParam(value = "prodDate", required = false) Long prodDate,
+                           @RequestParam(value = "isUsed", required = false) Boolean isUsed,
+                           @RequestParam(value = "speed", required = false) Double speed,
+                           @RequestParam(value = "crewSize", required = false) Integer crewSize) {
+        return shipDataService.updateShip(id,name,planet,shipType,prodDate,isUsed, speed,crewSize);
     }
 
     @RequestMapping(value = "rest/ships", method = RequestMethod.GET)

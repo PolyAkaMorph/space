@@ -2,12 +2,14 @@ package com.space.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "SHIP")
 public class Ship {
     @Id
     @Column(name = "ID")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     @Basic
     @Column(name = "NAME", length = 50)
@@ -21,7 +23,7 @@ public class Ship {
     private ShipType shipType;
     @Basic
     @Column(name = "PRODDATE")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date prodDate;
     @Basic
     @Column(name = "ISUSED")
@@ -104,5 +106,21 @@ public class Ship {
 
     public void setRating(Double rating) {
         this.rating = rating;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ship that = (Ship) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(planet, that.planet) &&
+                shipType == that.shipType &&
+                Objects.equals(prodDate, that.prodDate) &&
+                Objects.equals(isUsed, that.isUsed) &&
+                Objects.equals(speed, that.speed) &&
+                Objects.equals(crewSize, that.crewSize) &&
+                Objects.equals(rating, that.rating);
     }
 }

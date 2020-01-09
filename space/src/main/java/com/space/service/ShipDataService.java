@@ -45,35 +45,41 @@ public class ShipDataService {
     EntityManager em;
 
     @Transactional
-    public Ship updateShip(Long id, String name, String planet, ShipType shipType, Long prodDate, Boolean isUsed, Double speed, Integer crewSize) {
-        Ship ship = getAloneShip(id);
-        if (null == name) {
-            // checking how tests are working
+    public Ship updateShip(Long id, Ship ship) {
+        if (null == id) {
             throw new BadRequestException();
         }
-        if (null == name && null == planet && null == shipType && null == speed && null == crewSize) {
-            return ship;
+        Ship newShip = getAloneShip(id);
+        String name = ship.getName();
+        String planet = ship.getPlanet();
+        Date prodDate = ship.getProdDate();
+        Boolean isUsed = ship.getIsUsed();
+        ShipType shipType = ship.getShipType();
+        Double speed = ship.getSpeed();
+        Integer crewSize = ship.getCrewSize();
+
+        if (null == name && null == planet && null == shipType && null == speed && null == crewSize && null == prodDate) {
+            return newShip;
         }
-        //todo refactor here
         if (null != name && (name.length() > 50 || name.isEmpty())) throw new BadRequestException();
         if (null != planet && (planet.length() > 50 || planet.isEmpty())) throw new BadRequestException();
-        if (null != prodDate && (prodDate > DEFAULT_MAX_DATE || prodDate < DEFAULT_MIN_DATE)) throw new BadRequestException();
+        if (null != prodDate && (prodDate.getTime() > DEFAULT_MAX_DATE || prodDate.getTime() < DEFAULT_MIN_DATE)) throw new BadRequestException();
         if (null != speed && (speed > DEFAULT_MAX_SPEED || speed < DEFAULT_MIN_SPEED)) throw new BadRequestException();
         if (null != crewSize && (crewSize > DEFAULT_MAX_CREW_SIZE || crewSize < DEFAULT_MIN_CREW_SIZE)) throw new BadRequestException();
 
-        if (null != name) ship.setName(name);
-        if (null != planet) ship.setName(planet);
-        if (null != speed) ship.setSpeed(speed);
-        if (null != shipType) ship.setShipType(shipType);
-        if (null != prodDate) ship.setProdDate(new Date(prodDate));
-        if (null != isUsed) ship.setIsUsed(isUsed);
-        if (null != crewSize) ship.setCrewSize(crewSize);
-        Double rating = calcRating(ship.getSpeed(),ship.getIsUsed(),ship.getProdDate().getTime());
-        ship.setRating(rating);
-        em.merge(ship);
+        if (null != name) newShip.setName(name);
+        if (null != planet) newShip.setPlanet(planet);
+        if (null != speed) newShip.setSpeed(speed);
+        if (null != shipType) newShip.setShipType(shipType);
+        if (null != prodDate) newShip.setProdDate(prodDate);
+        if (null != isUsed) newShip.setIsUsed(isUsed);
+        if (null != crewSize) newShip.setCrewSize(crewSize);
+        Double rating = calcRating(newShip.getSpeed(),newShip.getIsUsed(),newShip.getProdDate().getTime());
+        newShip.setRating(rating);
+        em.merge(newShip);
         em.flush();
 
-        return ship;
+        return newShip;
     }
 
     private void checkParams(String name, String planet, Long prodDate, Double speed, Integer crewSize) {

@@ -33,16 +33,10 @@ public class SpaceController {
         return shipDataService.getAloneShip(id);
     }
 
-    @RequestMapping(value = "/rest/ships/{id}", method = RequestMethod.POST)
+    @RequestMapping(value = "/rest/ships/{id}", method = RequestMethod.POST, consumes ="application/json",produces = "application/json")
     public Ship updateShip(@PathVariable(value = "id") Long id,
-                           @RequestParam(value = "name", required = false) String name,
-                           @RequestParam(value = "planet", required = false) String planet,
-                           @RequestParam(value = "shipType", required = false) ShipType shipType,
-                           @RequestParam(value = "prodDate", required = false) Long prodDate,
-                           @RequestParam(value = "isUsed", required = false) Boolean isUsed,
-                           @RequestParam(value = "speed", required = false) Double speed,
-                           @RequestParam(value = "crewSize", required = false) Integer crewSize) {
-        return shipDataService.updateShip(id,name,planet,shipType,prodDate,isUsed, speed,crewSize);
+                           @RequestBody Ship ship) {
+        return shipDataService.updateShip(id, ship);
     }
 
     @RequestMapping(value = "rest/ships", method = RequestMethod.GET)

@@ -13,11 +13,6 @@ import java.util.Date;
 
 @Repository
 public interface ShipCrudRepository extends CrudRepository<Ship, Long> {
-    @Query(value = "from Ship where (:name is null or lower(name) like lower(concat('%', :name,'%'))) and " +
-            "(:planet is null or lower(planet) like lower(concat('%', :planet,'%')))")
-    Iterable<Ship> getShipsStable(@Param("name") String name,
-                                  @Param("planet") String planet);
-
     @Query(value = "select s from Ship s " +
             "where (:name is null or lower(s.name) like lower(concat('%', :name,'%'))) and " +
             "(:planet is null or lower(s.planet) like lower(concat('%', :planet,'%'))) and " +

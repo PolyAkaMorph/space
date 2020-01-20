@@ -29,7 +29,6 @@ public class SpaceController {
 
     @RequestMapping(value = "/rest/ships/{id}", method = RequestMethod.GET)
     public Ship getShip(@PathVariable(value = "id") Long id) {
-        logger.info("got one ship");
         return shipDataService.getAloneShip(id);
     }
 
@@ -55,7 +54,6 @@ public class SpaceController {
                                        @RequestParam(value = "order", required = false) ShipOrder shipOrder,
                                        @RequestParam(value = "pageNumber", required = false) Integer pageNumber,
                                        @RequestParam(value = "pageSize", required = false) Integer pageSize) {
-        logger.info("got many ships");
         return shipDataService.getShipsList(name, planet, shipType, after, before, isUsed, minSpeed, maxSpeed, minCrewSize, maxCrewSize, minRating, maxRating,
                 shipOrder, pageNumber, pageSize).getContent();
     }

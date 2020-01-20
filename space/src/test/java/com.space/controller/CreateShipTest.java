@@ -45,6 +45,12 @@ public class CreateShipTest {
         expected = new ShipInfoTest(41L, "123456789", "Earth", ShipType.MILITARY, 32998274577071L, true, 0.8, 14, 6.4);
     }
 
+    @Test
+    public void tastyTest() throws Exception {
+        assertTrue("true", null != mockMvc);
+    }
+
+
     //test1
     @Test
     public void createShipEmptyBodyTest() throws Exception {
@@ -153,6 +159,26 @@ public class CreateShipTest {
         ShipInfoTest actual = mapper.readValue(contentAsString, ShipInfoTest.class);
         assertTrue("Возвращается не правильный результат при запросе создания корабля с параметром isUsed.", actual.equals(expected));
     }
+
+    //test10
+    @Test
+    public void createShipIsUsedNullTest() throws Exception {
+        expected.isUsed = false;
+        expected.rating = 12.8;
+
+        ResultActions resultActions = mockMvc.perform(post("/rest/ships/")
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .content(TestsHelper.IS_USED_NULL_JSON))
+                .andExpect(status().isOk());
+
+        String contentAsString = resultActions.andReturn().getResponse().getContentAsString();
+        ShipInfoTest actual = mapper.readValue(contentAsString, ShipInfoTest.class);
+        assertTrue("Возвращается не правильный результат при запросе создания корабля без указания параметра isUsed.", actual.equals(expected));
+
+
+    }
+
 
     @Autowired
     public void setContext(WebApplicationContext context) {

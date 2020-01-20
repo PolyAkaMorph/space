@@ -136,6 +136,16 @@ public class TestsHelper {
                     "\"speed\":0.8," +
                     "\"crewSize\": 14" +
                     "}";
+    public static final String IS_USED_NULL_JSON =
+            "{" +
+                    "\"name\": \"123456789\"," +
+                    "\"planet\":\"Earth\"," +
+                    "\"shipType\": \"MILITARY\"," +
+                    "\"prodDate\" : 32998274577071," +
+                    "\"isUsed\":null," +
+                    "\"speed\":0.8," +
+                    "\"crewSize\": 14" +
+                    "}";
 
     public static final String CORRECT_COMPUTE_RATING_JSON =
             "{" +

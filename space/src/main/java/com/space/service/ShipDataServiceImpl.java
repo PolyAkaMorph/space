@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 @Service
-public class ShipDataService {
+public class ShipDataServiceImpl implements ShipDataService {
     private static final Long DEFAULT_MIN_DATE = 26192235660000L; // Sat Jan 01 00:01:00 MSK 2800
     private static final Long DEFAULT_MAX_DATE = 33134734859999L; // Sat Jan 01 00:00:59 MSK 3020
     private static final Long DEFAULT_DATE = 33103198800000L; //
@@ -203,7 +203,6 @@ public class ShipDataService {
     }
 
     private static Date setDefaultAfter(Long after) {
-        //todo think about cases like minSpeed > defaultMaxSpeed
         if (null == after || DEFAULT_MIN_DATE > after) {
             return new Date(DEFAULT_MIN_DATE);
         } else {
